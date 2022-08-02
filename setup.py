@@ -4,12 +4,12 @@ import re
 
 from setuptools import setup
 
-with open('easydns_restapi.py', 'r') as f:
+with open('easydns_restapi/__init__.py', 'r') as f:
     version_match = re.search(r'^__version__\s*=\s*\'([^\']*)\'',
                               f.read(), re.MULTILINE)
 
 if version_match is None:
-    raise RuntimeError('No version information found in easydns_restapi.py')
+    raise RuntimeError('No version information found in client.py')
 else:
     version = version_match.group(1)
 

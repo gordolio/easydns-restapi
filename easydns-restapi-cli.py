@@ -6,16 +6,28 @@ import atexit
 
 from time import time
 
-from easydns_restapi import info, _atexit, easydns_create_record, easydns_update_record
-
+from easydns_restapi.client import Client
 
 __version__ = '1.2.1'
-__author__  = 'Puru Tuladhar <ptuladhar3@gmail.com>'
+__author__ = 'Puru Tuladhar <ptuladhar3@gmail.com>'
+
+
+def info(self, msg):
+    print("[INFO] [%s] %s" % (self.now(), msg))
+
+
+def _atexit(self, s):
+    d = time() - s
+    if d > 60:
+        d = d / 60
+    info("script completed in %.2f seconds" % d)
+
 
 def main():
     global EASYDNS_CONF
+
     message = "A command-line tool for managing (create/update) EasyDNS DNS records using easyDNS rest API."
-    parser = OptionParser(usage=message ,version="%%prog v%s written by %s" % (__version__, __author__))
+    parser = OptionParser(usage=message, version="%%prog v%s written by %s" % (__version__, __author__))
 
     parser.add_option('-f', '--file', dest="conf",
                       help='configuration file containing easyDNS API details',
@@ -49,6 +61,8 @@ def main():
     except Exception as loadex:
         parser.error(loadex)
 
+    client = Client(EASYDNS_CONF)
+
     if option.create and option.update:
         parser.error("options --create and --update cannot be specified together")
 
@@ -65,7 +79,7 @@ def main():
         parser.error("both option --hostname and --address must be specified")
 
     hostname = option.hostname.lower()
-    address  = option.address
+    address = option.address
 
     # validate hostname and address
     if '.' in hostname or not re.match("^[a-z][a-z0-9]*$", hostname):
@@ -84,18 +98,21 @@ def main():
             if octet < 0 or octet > 255:
                 parser.error(_invalid_address)
 
-    print ("Press Ctrl-C to quit")
-    info("script started (delay set to %s seconds)" % (EASYDNS_CONF.get('delay')))
+    print("Press Ctrl-C to quit")
+    client.info("script started (delay set to %s seconds)" % (EASYDNS_CONF.get('delay')))
     atexit.register(_atexit, time())
 
     # verify API token and key are valid
     # easydns_verify_api_token()
 
     if action == "create":
-        easydns_create_record(hostname, address)
+        client.easydns_create_record(hostname, address)
     elif action == "update":
-        easydns_update_record(hostname, address)
+        client.easydns_update_record(hostname, address)
+
 
 if __name__ == '__main__':
-    try: main()
-    except KeyboardInterrupt: pass
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
