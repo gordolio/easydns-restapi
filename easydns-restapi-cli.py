@@ -9,13 +9,13 @@ from time import time
 from easydns_restapi import info, _atexit, easydns_create_record, easydns_update_record
 
 
-__VERSION__ = '1.2.1'
-__AUTHOR__  = 'Puru Tuladhar <ptuladhar3@gmail.com>'
+__version__ = '1.2.1'
+__author__  = 'Puru Tuladhar <ptuladhar3@gmail.com>'
 
 def main():
     global EASYDNS_CONF
     message = "A command-line tool for managing (create/update) EasyDNS DNS records using easyDNS rest API."
-    parser = OptionParser(usage=message ,version="%%prog v%s written by %s" % (__VERSION__, __AUTHOR__))
+    parser = OptionParser(usage=message ,version="%%prog v%s written by %s" % (__version__, __author__))
 
     parser.add_option('-f', '--file', dest="conf",
                       help='configuration file containing easyDNS API details',

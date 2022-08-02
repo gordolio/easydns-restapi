@@ -28,8 +28,8 @@ from sys import exit
 from time import sleep, strftime, time
 import json
 
-__VERSION__ = '1.2.1'
-__AUTHOR__  = 'Puru Tuladhar <ptuladhar3@gmail.com>'
+__version__ = '1.2.1'
+__author__  = 'Puru Tuladhar <ptuladhar3@gmail.com>'
 
 EASYDNS_CONF = {}
 
